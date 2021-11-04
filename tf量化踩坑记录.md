@@ -150,3 +150,32 @@ def _instance_norm(net):
   手动插入量化节点
   from tensorflow.contrib.quantize.python.quant_ops import MovingAvgQuantize
   ![在这里插入图片描述](https://img-blog.csdnimg.cn/80d95d42ba1f4352a80db130072f5607.png)
+  
+  训练过程问题排查
+
+1、检查训练数据据是否输出正常，可以通过tf.print
+
+tf.Print(input, data, message=None, first_n=None, summarize=None, name=None)
+
+'''
+参数param：
+input: 是一个tensor，需要打印的张量；
+data：data要求是一个list，list的每一个元素是一个张量，里面包含要打印的内容；
+message：是需要输出的错误信息；
+first_n：指只记录前n次；
+summarize：是对每个tensor只打印的条目数量，如果是None，对于每个输入tensor只打印3个元素
+name：这个操作op的名字
+返回值return:
+返回一个 Tensor，和 input的形状一样
+
+
+  example:
+
+  x = tf.Print(images_, ["images_:", images_], message='images_:  ', summarize=100)  
+sess.run([x])
+2、通过debug确定向量维度是否相同
+3、通过检查模型网络结构，或者将ckpt转pb后，查看结构
+
+
+
+！ tf 将pb再训练，只能训练新加入的层结构，对原始的参数，不可训练
